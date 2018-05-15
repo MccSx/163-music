@@ -2,6 +2,7 @@
 *::after{box-sizing: border-box;}
 *::before{box-sizing: border-box;}
 ul{list-style: none;}
+input{border: none;}
 a{color: inherit; text-decoration: none;}
 input{font: inherit;}
 body{font-size: 14px; line-height: 1.5;}
@@ -10,11 +11,16 @@ body{font-size: 14px; line-height: 1.5;}
 
 .page>aside{width: 340px; display: flex; flex-direction: column;}
 .page>aside .newSong{text-align: center; font-size: 18px; padding: 10px 0; border-bottom: 2px solid #999;}
-.page>aside .songList{flex-grow: 1;}
+.page>aside .songList-container{flex-grow: 1;}
 .page>aside .songList>li{font-size: 16px; padding: 5px 0 5px 10px; border-bottom: 1px solid #ddd;}
+.page>aside .songList>li.active{background: #d4d4d4;}
 
 .page>main{background: #d4d4d4; flex-grow: 1;}
-.page>main>form>label{display: block;}
+.page>main{padding: 100px 0 0 100px;}
+.page>main>form{position: relative;}
+.page>main>form>label{display: block; margin: 20px 0; font-size: 20px;}
+.page>main>form>label>input{width: 700px; background: transparent; border-bottom: 1px solid black;}
+.page>main>form button{width: 80px; height: 40px; position: absolute; left: 360px; border-radius: 5px; background: white;}
 
 .uploadWrapper{border: 2px dashed #ddd; padding: 40px; border-radius: 10px; display: flex; justify-content: center; 
   align-items: center; flex-direction: column;}
