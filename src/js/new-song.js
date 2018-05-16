@@ -13,8 +13,11 @@
       this.model = model
       this.view.render(this.model.date)
       window.eventHub.on('upload', (data) => {
-        console.log(data)
+        this.active()
       })
+    },
+    active() {
+      $(this.view.el).addClass('active')
     }
   }
   controller.init(view, model)

@@ -3,8 +3,8 @@
     el: '.songList-container',
     template: `
     <ul class="songList">
-      <li class="active">歌曲1</li>
-      <li>歌曲2</li>
+      <li>歌曲1</li>
+      <li class="active">歌曲2</li>
       <li>歌曲3</li>
       <li>歌曲4</li>
       <li>歌曲5</li>

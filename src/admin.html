@@ -12,6 +12,11 @@
       <div class="songList-container">
       </div>
       <div class="uploadArea">
+        <div id="wrapper" class="uploadWrapper">
+          <button id="btn" class="uploadBtn">点击或拖曳文件</button>
+          <p>文件大小不能超过 40MB</p>
+          <p id="uploadStatus">上传状态</p>
+        </div>
       </div>
     </aside>
     <main></main>
@@ -21,31 +26,11 @@
   <script src="../node_modules/plupload/js/plupload.min.js"></script>
   <script src="../node_modules/qiniu-js/dist/qiniu.min.js"></script>
   <script src="../node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="./js/av.js"></script>
   <script src="./js/event-hub.js"></script>
   <script src="./js/new-song.js"></script>
   <script src="./js/song-form.js"></script>
   <script src="./js/song-list.js"></script>
   <script src="./js/upload-song.js"></script>
-  <script>
-    var APP_ID = 'VEXAs1r3dNI2gCUkAyUI9WQE-gzGzoHsz';
-    var APP_KEY = 'hKmTMBaxOQNbfgybSFMzrk7L';
-
-    AV.init({
-      appId: APP_ID,
-      appKey: APP_KEY
-    });
-
-    // var TestObject = AV.Object.extend('Playlist');
-    // var testObject = new TestObject();
-    // testObject.save({
-    //   name: 'test',
-    //   cover: 'test',
-    //   creatorId: 'test',
-    //   description: 'test',
-    //   songs: ['1','2']
-    // }).then(function(object) {
-    //   alert('LeanCloud Rocks!');
-    // })
-  </script>
 </body>
 </html>

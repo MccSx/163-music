@@ -4,24 +4,60 @@
     template: `
       <h1>新建歌曲</h1>
       <form action="">
-        <label>歌名<input type="text"></label>
-        <label>歌手<input type="text"></label>
-        <label>外链<input type="text"></label>
+        <label>歌名<input name="name" type="text" value="__name__"></label>
+        <label>歌手<input name="singer" type="text" value=""></label>
+        <label>外链<input name="url" type="text" value="__url__"></label>
         <button type="submit">保存</button>
       </form>
     `,
-    render(data) {
-      $(this.el).html(this.template)
+    render(data={}) {
+      let valueArr = ['name','url','singer','id']
+      let newHtml = this.template
+      valueArr.map((val) => {
+        newHtml = newHtml.replace(`__${val}__`, data[val] || '')
+      })
+      $(this.el).html(newHtml)
     }
   }
-  let model = {}
+  let model = {
+    data:{name: '', url: '', singer: '', id: ''},
+    create(data) {
+      let Song = AV.Object.extend('Song')
+      let song = new Song()
+      song.set('name',data.name)
+      song.set('url',data.url)
+      song.set('singer',data.singer)
+      return song.save().then((newSong) => {
+        let {id, attributes} = newSong
+        Object.assign(this.data, {id, ...attributes})
+      }, (error) => {
+        console.error(error)
+      })
+    }
+  }
   let controller = {
     init() {
       this.view = view
       this.model = model
+      this.bindEvents()
       this.view.render(this.model.data)
       window.eventHub.on('upload', (data) => {
-        console.log(data)
+        this.model.data = data
+        this.view.render(this.model.data)
+      })
+    },
+    bindEvents() {
+      $(this.view.el).on('submit', 'form', (e) => {
+        e.preventDefault()
+        let valueArr = ['name', 'singer', 'url']
+        let tempData = {}
+        valueArr.map((value) => {
+          tempData[value] = $(this.view.el).find(`[name="${value}"]`).val()
+        })
+        this.model.create(tempData).then(() => {
+          console.log(this.model.data)
+          this.view.render({})
+        })
       })
     }
   }
