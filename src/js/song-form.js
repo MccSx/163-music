@@ -55,8 +55,10 @@
           tempData[value] = $(this.view.el).find(`[name="${value}"]`).val()
         })
         this.model.create(tempData).then(() => {
-          console.log(this.model.data)
           this.view.render({})
+          // window.eventHub.trigger('create', this.model.data)  //这里触发trigger发布的data(this.model.data)只是this.model.data的地址
+          let copyData = JSON.parse(JSON.stringify(this.model.data))
+          window.eventHub.trigger('create',copyData)
         })
       })
     }
