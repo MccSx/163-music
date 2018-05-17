@@ -5,7 +5,7 @@
       <h1>新建歌曲</h1>
       <form action="">
         <label>歌名<input name="name" type="text" value="__name__"></label>
-        <label>歌手<input name="singer" type="text" value=""></label>
+        <label>歌手<input name="singer" type="text" value="__singer__"></label>
         <label>外链<input name="url" type="text" value="__url__"></label>
         <button type="submit">保存</button>
       </form>
@@ -41,7 +41,14 @@
       this.model = model
       this.bindEvents()
       this.view.render(this.model.data)
+      this.bidnEventHub()
+    },
+    bidnEventHub() {
       window.eventHub.on('upload', (data) => {
+        this.model.data = data
+        this.view.render(this.model.data)
+      })
+      window.eventHub.on('select', (data) => {
         this.model.data = data
         this.view.render(this.model.data)
       })

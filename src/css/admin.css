@@ -13,7 +13,7 @@ body{font-size: 14px; line-height: 1.5;}
 .page>aside .newSong{text-align: center; font-size: 18px; padding: 10px 0; border-bottom: 2px solid #999;}
 .page>aside .newSong.active{background: #d4d4d4;}
 .page>aside .songList-container{flex-grow: 1;}
-.page>aside .songList>li{font-size: 16px; padding: 5px 0 5px 10px; border-bottom: 1px solid #ddd;}
+.page>aside .songList>li{font-size: 16px; padding: 5px 0 5px 10px; border-bottom: 1px solid #ddd; cursor: pointer;}
 .page>aside .songList>li.active{background: #d4d4d4;}
 
 .page>main{background: #d4d4d4; flex-grow: 1;}
