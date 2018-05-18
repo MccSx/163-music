@@ -14,9 +14,16 @@
       this.view.render(this.model.date)
       this.active()
       this.bindEventHub()
+      this.bindEvents()
+    },
+    bindEvents() {
+      $(this.view.el).on('click', () =>{
+        this.active()
+        window.eventHub.trigger('new')
+      })
     },
     bindEventHub() {
-      window.eventHub.on('upload', (data) => {
+      window.eventHub.on('new', (data) => {
         this.active()
       })
       window.eventHub.on('select', (data) => {
