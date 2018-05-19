@@ -27,3 +27,22 @@ body{font-size: 14px; line-height: 1.5;}
   align-items: center; flex-direction: column;}
 .uploadBtn{border-radius: 5px; padding: 10px; border: 1px solid #ddd; background: transparent; cursor: pointer;}
 .uploadBtn:hover{background: #ddd;}
+
+.loading-wrapper{visibility: hidden; height: 100%; width: 100%; position: fixed; top: 0; left: 0; z-index: 1; background: rgba(0,0,0,0.2);}
+.loading{width: 80px; height: 80px; margin: auto; position: absolute; top: 0; right: 0; bottom: 0; left: 0;}
+.loading::before{content: ''; width: 80px; height: 8px; background: #000; opacity: 0.1; position: absolute; top: 95px; left: 0; 
+  border-radius: 50%; animation: shadow 0.5s linear infinite;}
+.loading::after{content: ''; width: 80px; height: 80px; background: #1a6844; position: absolute; top: 0; left: 0; border-radius: 5px;
+  animation: animate 0.5s linear infinite;}
+.loading-wrapper.active{visibility: visible;}
+@keyframes animate{
+  17%{border-bottom-right-radius: 5px;}
+  25%{transform: translateY(15px) rotate(22.5deg);}
+  50%{transform: translateY(30px) scale(1,0.9) rotate(45deg); border-bottom-right-radius: 64px;}
+  75%{transform: translateY(15px) rotate(67.5deg);}
+  100%{transform: translateY(0) rotate(90deg);}
+}
+@keyframes shadow{
+  0%,100%{transform: scale(1, 1);}
+  50%{transform: scale(1.2, 1);}
+}
