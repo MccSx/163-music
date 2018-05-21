@@ -6,11 +6,12 @@
         <label>歌名<input name="name" type="text" value="__name__"></label>
         <label>歌手<input name="singer" type="text" value="__singer__"></label>
         <label>外链<input name="url" type="text" value="__url__"></label>
+        <label>外链<input name="cover" type="text" value="__cover__"></label>
         <button type="submit">保存</button>
       </form>
     `,
     render(data={}) {
-      let valueArr = ['name','url','singer','id']
+      let valueArr = ['name','url','singer','id','cover']
       let newHtml = this.template
       valueArr.map((val) => {
         newHtml = newHtml.replace(`__${val}__`, data[val] || '')
@@ -24,13 +25,14 @@
     }
   }
   let model = {
-    data:{name: '', url: '', singer: '', id: ''},
+    data:{name: '', url: '', singer: '', id: '', cover:''},
     create(data) {
       let Song = AV.Object.extend('Song')
       let song = new Song()
       song.set('name',data.name)
       song.set('url',data.url)
       song.set('singer',data.singer)
+      song.set('cover',data.cover)
       return song.save().then((newSong) => {
         let {id, attributes} = newSong
         Object.assign(this.data, {id, ...attributes})
@@ -45,6 +47,7 @@
       song.set('name', data.name)
       song.set('url', data.url)
       song.set('singer', data.singer)
+      song.set('cover',data.cover)
       // 保存到云端
       return song.save().then((response) => {
         Object.assign(this.data, data)
@@ -63,7 +66,7 @@
     bidnEventHub() {
       window.eventHub.on('new', (data) => {
         if (this.model.data.id) {
-          this.model.data = {name: '', url: '', singer: '', id: ''}
+          this.model.data = {name: '', url: '', singer: '', id: '', cover:''}
         } else {
           Object.assign(this.model.data, data)
         }
@@ -73,13 +76,9 @@
         this.model.data = data
         this.view.render(this.model.data)
       })
-      // window.eventHub.on('new', () => {
-      //   this.model.data = {name: '', url: '', singer: '', id: ''}
-      //   this.view.render(this.model.data)
-      // })
     },
     create() {
-      let valueArr = ['name', 'singer', 'url']
+      let valueArr = ['name', 'singer', 'url', 'cover']
       let tempData = {}
       valueArr.map((value) => {
         tempData[value] = $(this.view.el).find(`[name="${value}"]`).val()
@@ -92,11 +91,12 @@
       })
     },
     update() {
-      let valueArr = ['name', 'singer', 'url']
+      let valueArr = ['name', 'singer', 'url', 'cover']
       let tempData = {}
       valueArr.map((value) => {
         tempData[value] = $(this.view.el).find(`[name="${value}"]`).val()
       })
+      console.log(tempData)
       this.model.update(tempData).then(() => {
         this.view.render({})
         window.eventHub.trigger('update',JSON.parse(JSON.stringify(this.model.data)))

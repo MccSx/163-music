@@ -1,32 +1,24 @@
 {
   let view = {
-    el: '.app',
-    template: `
-      <audio controls src={{url}}></audio>
-      <div><button class="play">播放</button></div>
-      <div><button class="pause">暂停</button></div>
-    `,
+    el: '#app',
     init() {
       this.$el = $(this.el)
     },
     render(data={}) {
-      $(this.el).html(this.template.replace('{{url}}', data.url))
-    },
-    audioPlay() {
-      let audio = $(this.el).find('audio')[0]
-      audio.play()
-    },
-    audioPause() {
-      let audio = $(this.el).find('audio')[0]
-      audio.pause()
+      let {song} = data
+      $(this.el).css('background-image', `url(${song.cover})`)
+      $(this.el).find('img.cover').attr('src', song.cover)
     }
   }
   let model = {
-    data:{id:'', name:'', singer:'', url:''},
+    data:{
+      song: {id:'', name:'', singer:'', url:'', cover:''},
+      status: false
+    },
     getSong(id) {
       let query = new AV.Query('Song');
       return query.get(id).then( (song) => {
-        Object.assign(this.data, {id: song.id, ...song.attributes})
+        Object.assign(this.data.song, {id: song.id, ...song.attributes})
       }, function (error) {
         console.log(error)
       })
@@ -39,6 +31,7 @@
       this.model = model
       this.searchID = this.getSongID()
       this.model.getSong(this.searchID).then(() => {
+        console.log(this.model.data)
         this.view.render(this.model.data)
       })
       this.bindEvents()
