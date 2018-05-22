@@ -5,15 +5,30 @@
       this.$el = $(this.el)
     },
     render(data={}) {
-      let {song} = data
-      $(this.el).css('background-image', `url(${song.cover})`)
+      let {song, status} = data
+      $(this.el).find('.bg-img').css('background-image', `url(${song.cover})`)
       $(this.el).find('img.cover').attr('src', song.cover)
+      let audioUrl = $(this.el).find('audio').attr('src')
+      if (audioUrl !== song.url) {
+        $(this.el).find('audio').attr('src', song.url)
+      }
+      if (status === 'playing') {
+        $(this.el).find('.disc-container').addClass('playing')
+      } else {
+        $(this.el).find('.disc-container').removeClass('playing')
+      }
+    },
+    audioPlay() {
+      $(this.el).find('audio')[0].play()
+    },
+    audioPause() {
+      $(this.el).find('audio')[0].pause()
     }
   }
   let model = {
     data:{
       song: {id:'', name:'', singer:'', url:'', cover:''},
-      status: false
+      status: 'paused'
     },
     getSong(id) {
       let query = new AV.Query('Song');
@@ -31,16 +46,19 @@
       this.model = model
       this.searchID = this.getSongID()
       this.model.getSong(this.searchID).then(() => {
-        console.log(this.model.data)
         this.view.render(this.model.data)
       })
       this.bindEvents()
     },
     bindEvents() {
-      this.view.$el.on('click', '.play', () => {
+      this.view.$el.find('.disc-container').on('click', '.icon-play', () => {
+        this.model.data.status = 'playing'
+        this.view.render(this.model.data)
         this.view.audioPlay()
       })
-      this.view.$el.on('click', '.pause', () => {
+      this.view.$el.find('.disc-container').on('click', '.icon-pause', () => {
+        this.model.data.status = 'paused'
+        this.view.render(this.model.data)
         this.view.audioPause()
       })
     },
