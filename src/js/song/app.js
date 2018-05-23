@@ -6,28 +6,66 @@
     },
     render(data={}) {
       let {song, status} = data
-      $(this.el).find('.bg-img').css('background-image', `url(${song.cover})`)
-      $(this.el).find('img.cover').attr('src', song.cover)
-      let audioUrl = $(this.el).find('audio').attr('src')
+      this.$el.find('.bg-img').css('background-image', `url(${song.cover})`)
+      this.$el.find('img.cover').attr('src', song.cover)
+      let audioUrl = this.$el.find('audio').attr('src')
       if (audioUrl !== song.url) {
-        $(this.el).find('audio').attr('src', song.url)
+        this.$el.find('audio').attr('src', song.url)
       }
       if (status === 'playing') {
-        $(this.el).find('.disc-container').addClass('playing')
+        this.$el.find('.disc-container').addClass('playing')
       } else {
-        $(this.el).find('.disc-container').removeClass('playing')
+        this.$el.find('.disc-container').removeClass('playing')
       }
+      this.$el.find('.song-description>h1').text(song.name)
+
+      song.lyrics.split('\n').map((val) => {
+        let pTag = document.createElement('p')
+        let reg = /\[([\d:.]+)\](.+)/
+        let matches = val.match(reg)
+        if (matches) {
+          pTag.textContent = matches[2]
+          let timeArr = matches[1].split(':')
+          let newTime =  parseInt(timeArr[0]) * 60 + parseFloat(timeArr[1])
+          pTag.setAttribute('data-time', newTime)
+        } else {
+          pTag.textContent = val
+        }
+        this.$el.find('.lyric>.lines').append(pTag)
+      })
     },
     audioPlay() {
-      $(this.el).find('audio')[0].play()
+      this.$el.find('audio')[0].play()
     },
     audioPause() {
-      $(this.el).find('audio')[0].pause()
+      this.$el.find('audio')[0].pause()
+    },
+    showLyric(time) {
+      let allP = this.$el.find('.lyric>.lines>p')
+      let myPTag
+      for (let i = 0; i < allP.length; i++) {
+        if (i === allP.length-1) {
+          myPTag = allP[i]
+          break
+        } else {
+          let previousTime = allP.eq(i).attr('data-time')
+          let nextTime = allP.eq(i+1).attr('data-time')
+          if (previousTime <= time && time < nextTime) {
+            //let height = allP.eq(i).offset().top - this.$el.find('.lyric').offset().top
+            myPTag = allP[i]
+            break
+          }         
+        }
+      }
+      let pHeight = myPTag.getBoundingClientRect().top
+      let linesHeight = this.$el.find('.lyric>.lines')[0].getBoundingClientRect().top
+      let slideLenght = pHeight - linesHeight
+      this.$el.find('.lyric>.lines').css({transform: `translateY(${-slideLenght}px)`})
     }
   }
   let model = {
     data:{
-      song: {id:'', name:'', singer:'', url:'', cover:''},
+      song: {id:'', name:'', singer:'', url:'', cover:'', lyrics:''},
       status: 'paused'
     },
     getSong(id) {
@@ -60,6 +98,14 @@
         this.model.data.status = 'paused'
         this.view.render(this.model.data)
         this.view.audioPause()
+      })
+      this.view.$el.find('audio').on('ended', () => {
+        this.model.data.status = 'paused'
+        this.view.render(this.model.data)
+      })
+      let audioTag = document.querySelector('audio')
+      this.view.$el.find('audio').on('timeupdate', () => {
+        this.view.showLyric(audioTag.currentTime)
       })
     },
     getSongID() {

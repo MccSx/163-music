@@ -7,11 +7,12 @@
         <label>歌手<input name="singer" type="text" value="__singer__"></label>
         <label>外链<input name="url" type="text" value="__url__"></label>
         <label>外链<input name="cover" type="text" value="__cover__"></label>
+        <label>歌词<textarea name="lyrics" cols="90" rows="10">__lyrics__</textarea></label>
         <button type="submit">保存</button>
       </form>
     `,
     render(data={}) {
-      let valueArr = ['name','url','singer','id','cover']
+      let valueArr = ['name','url','singer','id','cover','lyrics']
       let newHtml = this.template
       valueArr.map((val) => {
         newHtml = newHtml.replace(`__${val}__`, data[val] || '')
@@ -25,7 +26,7 @@
     }
   }
   let model = {
-    data:{name: '', url: '', singer: '', id: '', cover:''},
+    data:{name: '', url: '', singer: '', id: '', cover:'', lyrics:''},
     create(data) {
       let Song = AV.Object.extend('Song')
       let song = new Song()
@@ -33,6 +34,7 @@
       song.set('url',data.url)
       song.set('singer',data.singer)
       song.set('cover',data.cover)
+      song.set('lyrics',data.lyrics)
       return song.save().then((newSong) => {
         let {id, attributes} = newSong
         Object.assign(this.data, {id, ...attributes})
@@ -48,6 +50,7 @@
       song.set('url', data.url)
       song.set('singer', data.singer)
       song.set('cover',data.cover)
+      song.set('lyrics',data.lyrics)
       // 保存到云端
       return song.save().then((response) => {
         Object.assign(this.data, data)
@@ -66,7 +69,7 @@
     bidnEventHub() {
       window.eventHub.on('new', (data) => {
         if (this.model.data.id) {
-          this.model.data = {name: '', url: '', singer: '', id: '', cover:''}
+          this.model.data = {name: '', url: '', singer: '', id: '', cover:'', lyrics:''}
         } else {
           Object.assign(this.model.data, data)
         }
@@ -78,7 +81,7 @@
       })
     },
     create() {
-      let valueArr = ['name', 'singer', 'url', 'cover']
+      let valueArr = ['name', 'singer', 'url', 'cover','lyrics']
       let tempData = {}
       valueArr.map((value) => {
         tempData[value] = $(this.view.el).find(`[name="${value}"]`).val()
@@ -91,7 +94,7 @@
       })
     },
     update() {
-      let valueArr = ['name', 'singer', 'url', 'cover']
+      let valueArr = ['name', 'singer', 'url', 'cover','lyrics']
       let tempData = {}
       valueArr.map((value) => {
         tempData[value] = $(this.view.el).find(`[name="${value}"]`).val()

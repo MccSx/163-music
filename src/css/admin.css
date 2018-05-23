@@ -21,6 +21,7 @@ body{font-size: 14px; line-height: 1.5;}
 .page>main>form{position: relative;}
 .page>main>form>label{display: block; margin: 20px 0; font-size: 20px;}
 .page>main>form>label>input{width: 700px; background: transparent; border-bottom: 1px solid black;}
+.page>main>form>label>textarea{background: transparent; width: 700px; border-radius: 5px;}
 .page>main>form button{width: 80px; height: 40px; position: absolute; left: 360px; border-radius: 5px; background: white;}
 
 .uploadWrapper{border: 2px dashed #ddd; padding: 40px; border-radius: 10px; display: flex; justify-content: center; 
