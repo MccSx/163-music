@@ -60,7 +60,8 @@
       let pHeight = myPTag.getBoundingClientRect().top
       let linesHeight = this.$el.find('.lyric>.lines')[0].getBoundingClientRect().top
       let slideLenght = pHeight - linesHeight
-      this.$el.find('.lyric>.lines').css({transform: `translateY(${-slideLenght}px)`})
+      this.$el.find('.lyric>.lines').css({transform: `translateY(${-(slideLenght-25)}px)`})
+      $(myPTag).addClass('active').siblings('.active').removeClass('active')
     }
   }
   let model = {

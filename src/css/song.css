@@ -33,7 +33,7 @@
 
 .song-description{
 	flex-grow: 1;
-	color: white;
+	color: rgba(0,0,0,0.5);
 	text-align: center;
 	line-height: 2;
 	margin-top: 20px;
